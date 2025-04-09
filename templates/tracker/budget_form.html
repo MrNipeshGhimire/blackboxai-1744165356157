@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if form.instance.pk %}Update{% else %}Create{% endif %} Budget</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.name.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.amount.label_tag }}
+            {{ form.amount }}
+            {% if form.amount.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.amount.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.period.label_tag }}
+            {{ form.period }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.category.label_tag }}
+            {{ form.category }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.start_date.label_tag }}
+            {{ form.start_date }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.end_date.label_tag }}
+            {{ form.end_date }}
+        </div>
+
+        <div class="mb-3 form-check">
+            {{ form.is_active }}
+            {{ form.is_active.label_tag }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %}Update{% else %}Create{% endif %} Budget
+        </button>
+        <a href="{% url 'budget_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
