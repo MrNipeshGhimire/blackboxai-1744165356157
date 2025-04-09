@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10 bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Your Profile</h2>
+    
+    {% if form.errors %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        Please correct the errors below.
+    </div>
+    {% endif %}
+    
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        
+        <div>
+            <label for="{{ form.initial_balance.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                {{ form.initial_balance.label }}
+            </label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                {{ form.initial_balance }}
+            </div>
+            {% if form.initial_balance.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.initial_balance.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div>
+            <label for="{{ form.weekly_limit.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                {{ form.weekly_limit.label }}
+            </label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                {{ form.weekly_limit }}
+            </div>
+            {% if form.weekly_limit.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.weekly_limit.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div>
+            <label for="{{ form.monthly_limit.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                {{ form.monthly_limit.label }}
+            </label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                {{ form.monthly_limit }}
+            </div>
+            {% if form.monthly_limit.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.monthly_limit.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="flex justify-between pt-4">
+            <a href="{% url 'dashboard' %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">
+                Back to Dashboard
+            </a>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
