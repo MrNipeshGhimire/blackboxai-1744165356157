@@ -3,8 +3,51 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Transaction, UserProfile
-from .forms import TransactionForm, ProfileForm
+from .models import Budget, Transaction, UserProfile
+from .forms import BudgetForm, TransactionForm, UserProfileForm
+from django.utils import timezone
+
+@login_required
+def budget_list(request):
+    budgets = Budget.objects.filter(user=request.user, is_active=True)
+    return render(request, 'tracker/budget_list.html', {'budgets': budgets})
+
+@login_required
+def budget_create(request):
+    if request.method == 'POST':
+        form = BudgetForm(request.POST)
+        if form.is_valid():
+            budget = form.save(commit=False)
+            budget.user = request.user
+            budget.save()
+            messages.success(request, 'Budget created successfully!')
+            return redirect('budget_list')
+    else:
+        form = BudgetForm()
+    return render(request, 'tracker/budget_form.html', {'form': form})
+
+@login_required
+def budget_update(request, pk):
+    budget = get_object_or_404(Budget, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = BudgetForm(request.POST, instance=budget)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Budget updated successfully!')
+            return redirect('budget_list')
+    else:
+        form = BudgetForm(instance=budget)
+    return render(request, 'tracker/budget_form.html', {'form': form})
+
+@login_required
+def budget_delete(request, pk):
+    budget = get_object_or_404(Budget, pk=pk, user=request.user)
+    if request.method == 'POST':
+        budget.is_active = False
+        budget.save()
+        messages.success(request, 'Budget deactivated successfully!')
+        return redirect('budget_list')
+    return render(request, 'tracker/budget_confirm_delete.html', {'budget': budget})
 
 @login_required
 def dashboard(request):
@@ -47,13 +90,13 @@ def register(request):
 def profile(request):
     profile = get_object_or_404(UserProfile, user=request.user)
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
             return redirect('dashboard')
     else:
-        form = ProfileForm(instance=profile)
+        form = UserProfileForm(instance=profile)
     return render(request, 'tracker/profile.html', {'form': form})
 
 @login_required
