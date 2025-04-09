@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Confirm Budget Deactivation</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <p>Are you sure you want to deactivate the budget for <strong>{{ budget.name }}</strong>?</p>
+            <p>Amount: {{ budget.amount }}</p>
+            <p>Period: {{ budget.get_period_display }}</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, Deactivate</button>
+                <a href="{% url 'budget_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
