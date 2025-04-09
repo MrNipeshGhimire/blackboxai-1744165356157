@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Your Budgets</h2>
+    <a href="{% url 'budget_create' %}" class="btn btn-primary mb-3">Create New Budget</a>
+    
+    <div class="list-group">
+        {% for budget in budgets %}
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h5>{{ budget.name }}</h5>
+                    <p>Amount: {{ budget.amount }}</p>
+                    <p>Period: {{ budget.get_period_display }}</p>
+                    <p>Category: {{ budget.category }}</p>
+                </div>
+                <div class="btn-group">
+                    <a href="{% url 'budget_update' budget.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a href="{% url 'budget_delete' budget.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">You don't have any budgets yet.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
